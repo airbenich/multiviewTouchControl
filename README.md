@@ -2,6 +2,8 @@
 A touchscreen multiview control app for Blackmagic ATEM switcher. Converts touchscreen interactions to ATEM commands via Sofie ATEM API.
 For development the Touchscreen Dell P2418HT was used and tested.
 
+
+
 ![Infographic on how to use this app](https://raw.githubusercontent.com/airbenich/multiviewTouchControl/master/gfx/multiview_gfx.png)
 
 ## To Use
