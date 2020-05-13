@@ -1,0 +1,131 @@
+<!doctype html><html><head>
+	<!-- disable default zoom behavior -->
+	<meta name="viewport" content="width=device-width,user-scalable=no" />
+
+	<style type="text/css">
+		textarea {border:1px solid black;float:right;overflow:auto;width:50%;}
+		div {background-color:#0000CC;border:8px solid black;color:white;cursor:pointer;height:100px;margin:1em;text-align:center;width:100px;-webkit-tap-highlight-color:transparent;}
+		.ontap-1, .ontap, .onclick {background-color:#009900;}
+		.ontap-2, .ondbltap, .ondblclick {border-color:#CC0000;}
+		.ontap-3 {border-radius:1em;}
+	</style>
+</head><body>
+
+<h1>doubleTap.js</h1>
+<p>This utility emulates click and dblclick for touch devices
+on typically non-clickable elements (e.g. an ordinary <code>&lt;div&gt;</code>).</p>
+<p>Unfortunately, touch browsers fire a broken 'click' event which does not update
+the number of clicks making double click events much more difficult handle.
+As such two new events are needed which gets consistently fired in both environments.
+These are implemented here as 'tap' and 'dbltap'.</p>
+
+<textarea rows="40"></textarea>
+
+<p>The first example fires no new tap events, but it monitors native click events.
+With this example, you can see the brokenness of clicks on touch.</p>
+<div id="none">native click and dblclick</div>
+
+<p>The second example fires both tap and dbltap:</p>
+<div id="both">both tap and dbltap</div>
+
+<p>The third example fires both tap and dbltap,
+but the handler only allows one or the other to fire for a particular series.
+Single clicks are therefore delayed until a double click is impossible:</p>
+<div id="xor">either tap or dbltap, but not both</div>
+
+<script type="text/javascript" src="doubleTap.js"></script>
+<script type="text/javascript" src="xorTap.js"></script>
+<script type="text/javascript">
+
+	function log(msg) {
+		if (window.console) { console.log(msg); }
+		var log = document.getElementsByTagName('textarea')[0];
+		log.innerHTML = msg+'\r'+log.innerHTML;
+	}
+
+	// helper to toggle CSS class
+	function toggleClass(elem, name) {
+		if (elem.className.indexOf(name) < 0) {
+			elem.className += ' '+name;
+
+		} else {
+			elem.className = elem.className.split(name).join('');
+		}
+	}
+
+	function clearSelection() {
+		var selection =
+			window.getSelection ? window.getSelection() :
+			document.getSelection ? document.getSelection() :
+			document.selection;
+
+		if (selection && selection.removeAllRanges) {
+			// W3C-style
+			selection.removeAllRanges();
+
+		} else if (selection && selection.empty) {
+			// IE-style
+			selection.empty();
+		}
+	}
+
+	// generic handler for either event
+	function printEvt(e) {
+		log(this.id+', '+e.type+': '+e.detail);
+		toggleClass(this, 'on'+e.type);
+		clearSelection();
+	}
+
+	var HAS_TOUCH = ('ontouchstart' in window);
+
+	// ----------------------------------------------------
+	// Do not enable touch clicks, but monitor both.
+	// NOTE: native clicks will fire but touch will not.
+	var none = document.getElementById('none');
+	none.addEventListener('click', printEvt, false);
+	none.addEventListener('dblclick', printEvt, false);
+
+	// ----------------------------------------------------
+	// Enable click & dblclick events, and monitor both.
+	var both = document.getElementById('both');
+	both.addEventListener(HAS_TOUCH ? 'touchend' : 'mouseup', doubleTap(), false);
+	both.addEventListener('tap', printEvt, false);
+	both.addEventListener('dbltap', printEvt, false);
+
+	// ----------------------------------------------------
+	// Enable either click or dblclick action, but not both.
+	// Do this by only monitoring the click event
+	// and forking off e.details (click count) with a delay
+	// that suppresses the single click on the second click.
+	// http://stackoverflow.com/a/11057483/43217
+	var xor = document.getElementById('xor'),
+		MULTI_CLICK_DELAY = 250;
+	xor.addEventListener(HAS_TOUCH ? 'touchend' : 'mouseup', doubleTap(MULTI_CLICK_DELAY), false);
+
+	var xorClick = 	xorTap(
+		function(e) {
+			// single click action here
+			log(this.id+', single click');
+			toggleClass(this, 'ontap-1');
+			clearSelection();
+		},
+		function(e) {
+			// double click action here
+			log(this.id+', double click');
+			toggleClass(this, 'ontap-2');
+			clearSelection();
+		},
+		function(e) {
+			// double click action here
+			log(this.id+', triple click');
+			toggleClass(this, 'ontap-3');
+			clearSelection();
+		},
+		MULTI_CLICK_DELAY);
+
+	xor.addEventListener('tap', xorClick, false);
+
+</script>
+
+</body>
+</html>

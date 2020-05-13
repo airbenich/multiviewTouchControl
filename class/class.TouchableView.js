@@ -11,7 +11,12 @@ class TouchableView {
         this.transitionLength = 170;
         this.selector = 'touchable-view';
         this.onClickCallbacks = [];
+        this.onDoubleClickCallbacks = [];
         this.onTransitionChangeCallbacks = [];
+        this.startx = 0;
+        this.starty = 0;
+        this.transitionActive = false;
+        // this.dist = 0;
     }
 
     setDomElement(domElement) {
@@ -22,91 +27,67 @@ class TouchableView {
     activateUiHandler() {
         let thisElement = this;
 
-        // mousedown
-        this.domElement.mousedown(function(event) {
-            thisElement.mousedownHandler(event);
+        this.domElement.click(function () {
+            thisElement.clickHandler();
         });
-        
-        // mousemove
-        this.domElement.mousemove(function(event) {
-            thisElement.mousemoveHandler(event.pageX,event.pageY);
-        });
-        
-        // mouseup
-        this.domElement.mouseup(function() {
-            thisElement.mouseupHandler();
-        });
-    }
 
-    mousemoveHandler(x,y) {
-        if(this.transitionStart !== null) {
-            var distanceX = Math.abs(x-this.transitionStart.x);
-            var distanceY = Math.abs(y-this.transitionStart.y);
+        this.domElement.dblclick(function () {
+            thisElement.dblclickHandler();
+        });
+
+
+        this.domElement[0].addEventListener("touchstart", function(eve){
+            let touchobj = eve.changedTouches[0]; // erster Finger
+            thisElement.startx = parseInt(touchobj.clientX); // X/Y-Koordinaten relativ zum Viewport
+            thisElement.starty = parseInt(touchobj.clientY);
+            // console.log("touchstart bei ClientX: " + thisElement.startx + "px ClientY: " + thisElement.starty + "px");
+
+            thisElement.transitionActive = true;
+            // eve.preventDefault();
+        });
+    
+        this.domElement[0].addEventListener("touchmove", function(eve){
+            let touchobj = eve.changedTouches[0]; // erster Finger
+
+            var distanceX = Math.abs(touchobj.clientX-thisElement.startx);
+            var distanceY = Math.abs(touchobj.clientY-thisElement.starty);
             var longestDistance = distanceX > distanceY ? distanceX : distanceY;
             var transitionLength = 170;
             var transition = longestDistance/(transitionLength/100);
-            if(transition <= 100 && transition >= 0) {
-                this.setTransition(transition);
-            } else {
-                if(transition > 100) this.setTransition(100);
-                if(transition < 0) this.setTransition(0);
+
+            if(thisElement.transitionActive == true) {
+                if(transition >= 100) {
+                    thisElement.setTransition(100);
+                    thisElement.transitionActive = false;
+                }
+                if(transition < 100) {
+                    thisElement.setTransition(transition);
+                }
             }
 
-            // ui feedback
-            if(this.transitionCurrent > this.gestureThreshold) {
-                this.domElement.css('background','#35CD4B');
-            }
-            // console.log(this.transitionCurrent);
-        }
-    }
-    
-    mousedownHandler() {
-        event.preventDefault();
-        this.transitionStart = {
-            x:event.pageX,
-            y:event.pageY
-        };
-        console.log('Mousedown on ' + this.name);
-
-        // ui feedback
-        this.domElement.css('background','#F2CF2F');
-    }
-
-    mouseupHandler() {
-        let thisElement = this;
-        console.log('Mouseup on ' + this.name);
-        if(this.transitionCurrent > this.gestureThreshold) {
-            // gesture
-            if(this.transitionCurrent < 100 && this.transitionCurrent > 0) {
-                // finish animation when not finished
-                if(this.transitionCurrent >= 50)  $(this).animate({transitionCurrent: 100}, thisElement.gestureNotCompletedAnimationTime, transitionCompleted());
-                if(this.transitionCurrent < 50)   $(this).animate({transitionCurrent: 0},   thisElement.gestureNotCompletedAnimationTime, transitionCompleted());
-            } else {
-                transitionCompleted();
-            }
-        } else {
-            // click
-            this.click();
-            resetMouseValues();
-        }
-
-        function transitionCompleted() {
-            console.log('Transition completed');
-            resetMouseValues();
-        }
+            // eve.preventDefault();
+        });
         
-        function resetMouseValues() {
-            thisElement.transitionStart = null;
-            thisElement.setTransition(null);
+        this.domElement[0].addEventListener("touchend", function(eve){
+            let touchobj = eve.changedTouches[0]; // reference first touch point for this event
+            console.log("touchend bei X-Koordinate: " + touchobj.clientX + "px Y-Koordinate: " + touchobj.clientY + "px");
+            // eve.preventDefault();
+        });
+    }
 
-            // ui feedback
-            thisElement.domElement.css('background','#222');
-        }
+    clickHandler() {
+        this.click();
+    }
+
+    dblclickHandler() {
+        this.doubleClick();
     }
 
     setTransition(value) {
+        console.log(value);
+        
         this.transitionCurrent = value;
-        this.transitionChange(value);
+        this.transitionChange(value*100);
 
         // ui feedback for transition
         if(this.transitionCurrent != null) {
@@ -129,10 +110,24 @@ class TouchableView {
             element();
         });
     }
+    
+    // double click event execution
+    doubleClick() {
+        console.log('Double on ' + this.name);
+        this.onDoubleClickCallbacks.forEach(element => {
+            // execute element
+            element();
+        });
+    }
 
     // click event registration
     onClick(callback) {
         this.onClickCallbacks.push(callback);
+    }
+
+    // click event registration
+    onDoubleClick(callback) {
+        this.onDoubleClickCallbacks.push(callback);
     }
 
     // transition change event execution

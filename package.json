@@ -16,7 +16,7 @@
   "author": "airbenich",
   "license": "GLP-3.0",
   "devDependencies": {
-    "electron": "^7.1.7"
+    "electron": "^7.2.4"
   },
   "dependencies": {
     "atem-connection": "^1.2.0",
