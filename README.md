@@ -27,8 +27,23 @@ npm start
 npm start switcher 192.168.1.110
 ```
 
-## Known issues
-Connection to ATEM Mixer via Sofie Library couldn't be tested yet, because i don't have access to an atem mixer right now.
+## Put into autostart in raspbian stretch
+Create a new file and edit it:
+```bash
+touch /etc/xdg/autostart/multiviewTouchControl.desktop
+sudo nano /etc/xdg/autostart/multiviewTouchControl.desktop
+```
+Put in this file the following content:
+```bash
+[Desktop Entry]
+Type=Application
+Name=MultiviewTouchControl
+Comment=multiviewTouchControl
+NoDisplay=false
+Exec=npm start --prefix /path/to/application/folder/ switcher YOUR.SWITCHER.IP.ADDRESS
+```
+
+Save the file and reboot.
 
 ## License
 
