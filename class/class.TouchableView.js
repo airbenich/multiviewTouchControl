@@ -13,8 +13,8 @@ class TouchableView {
         this.onClickCallbacks = [];
         this.onDoubleClickCallbacks = [];
         this.onTransitionChangeCallbacks = [];
-        this.startx = 0;
-        this.starty = 0;
+        this.startX = 0;
+        this.startY = 0;
         this.transitionActive = false;
         // this.dist = 0;
     }
@@ -38,9 +38,9 @@ class TouchableView {
 
         this.domElement[0].addEventListener("touchstart", function(eve){
             let touchobj = eve.changedTouches[0]; // erster Finger
-            thisElement.startx = parseInt(touchobj.clientX); // X/Y-Koordinaten relativ zum Viewport
-            thisElement.starty = parseInt(touchobj.clientY);
-            // console.log("touchstart bei ClientX: " + thisElement.startx + "px ClientY: " + thisElement.starty + "px");
+            thisElement.startX = parseInt(touchobj.clientX); // X/Y-Koordinaten relativ zum Viewport
+            thisElement.startY = parseInt(touchobj.clientY);
+            // console.log("touchstart bei ClientX: " + thisElement.startX + "px ClientY: " + thisElement.startY + "px");
 
             thisElement.transitionActive = true;
             // eve.preventDefault();
@@ -49,10 +49,10 @@ class TouchableView {
         this.domElement[0].addEventListener("touchmove", function(eve){
             let touchobj = eve.changedTouches[0]; // erster Finger
 
-            var distanceX = Math.abs(touchobj.clientX-thisElement.startx);
-            var distanceY = Math.abs(touchobj.clientY-thisElement.starty);
+            var distanceX = Math.abs(touchobj.clientX-thisElement.startX);
+            var distanceY = Math.abs(touchobj.clientY-thisElement.startY);
             var longestDistance = distanceX > distanceY ? distanceX : distanceY;
-            var transitionLength = 170;
+            var transitionLength = 270;
             var transition = longestDistance/(transitionLength/100);
 
             if(thisElement.transitionActive == true) {
@@ -70,7 +70,7 @@ class TouchableView {
         
         this.domElement[0].addEventListener("touchend", function(eve){
             let touchobj = eve.changedTouches[0]; // reference first touch point for this event
-            console.log("touchend bei X-Koordinate: " + touchobj.clientX + "px Y-Koordinate: " + touchobj.clientY + "px");
+            // console.log("touchend bei X-Koordinate: " + touchobj.clientX + "px Y-Koordinate: " + touchobj.clientY + "px");
             // eve.preventDefault();
         });
     }
@@ -84,8 +84,6 @@ class TouchableView {
     }
 
     setTransition(value) {
-        console.log(value);
-        
         this.transitionCurrent = value;
         this.transitionChange(value*100);
 
@@ -132,6 +130,7 @@ class TouchableView {
 
     // transition change event execution
     transitionChange(position) {
+        // console.log('Transition Change on ' + this.name + ' to ' + position);
         console.log('Transition Change on ' + this.name);
         this.onTransitionChangeCallbacks.forEach(element => {
             // execute element
