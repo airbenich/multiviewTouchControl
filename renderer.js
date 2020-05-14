@@ -30,9 +30,9 @@ if(switcherip !== null) {
     let mainswitcher = new Videoswitcher('Mainswitcher',switcherip);
 
     // connect touchable view to mixer action
-    grid.elementList['preview'].onDoubleClick(function () {
-        mainswitcher.cut();
-    });
+    // grid.elementList['preview'].onDoubleClick(function () {
+    //     mainswitcher.cut();
+    // });
     
     grid.elementList['preview'].onTransitionChange(function (position) {
         mainswitcher.setTransitionPosition(position);
@@ -43,72 +43,72 @@ if(switcherip !== null) {
     });
     
     grid.elementList['input-1'].onClick(function () {
-        mainswitcher.changePreviewInput(1);
+        mainswitcher.tapped(1);
     });
 
-    grid.elementList['input-1'].onDoubleClick(function () {
-        mainswitcher.cut();
-    });
+    // grid.elementList['input-1'].onDoubleClick(function () {
+    //     mainswitcher.cut();
+    // });
     
     grid.elementList['input-2'].onClick(function () {
-        mainswitcher.changePreviewInput(2);
+        mainswitcher.tapped(2);
     });
 
-    grid.elementList['input-2'].onDoubleClick(function () {
-        mainswitcher.cut();
-    });
+    // grid.elementList['input-2'].onDoubleClick(function () {
+    //     mainswitcher.cut();
+    // });
     
     grid.elementList['input-3'].onClick(function () {
-        mainswitcher.changePreviewInput(3);
+        mainswitcher.tapped(3);
     });
 
-    grid.elementList['input-3'].onDoubleClick(function () {
-        mainswitcher.cut();
-    });
+    // grid.elementList['input-3'].onDoubleClick(function () {
+    //     mainswitcher.cut();
+    // });
     
     grid.elementList['input-4'].onClick(function () {
-        mainswitcher.changePreviewInput(4);
+        mainswitcher.tapped(4);
     });
 
-    grid.elementList['input-4'].onDoubleClick(function () {
-        mainswitcher.cut();
-    });
+    // grid.elementList['input-4'].onDoubleClick(function () {
+    //     mainswitcher.cut();
+    // });
     
     grid.elementList['input-5'].onClick(function () {
-        mainswitcher.changePreviewInput(5);
+        mainswitcher.tapped(5);
     });
 
-    grid.elementList['input-5'].onDoubleClick(function () {
-        mainswitcher.cut();
-    });
+    // grid.elementList['input-5'].onDoubleClick(function () {
+    //     mainswitcher.cut();
+    // });
     
     grid.elementList['input-6'].onClick(function () {
-        mainswitcher.changePreviewInput(6);
+        mainswitcher.tapped(6);
     });
 
-    grid.elementList['input-6'].onDoubleClick(function () {
-        mainswitcher.cut();
-    });
+    // grid.elementList['input-6'].onDoubleClick(function () {
+    //     mainswitcher.cut();
+    // });
     
     grid.elementList['input-7'].onClick(function () {
-        mainswitcher.changePreviewInput(7);
+        mainswitcher.tapped(7);
     });
 
-    grid.elementList['input-7'].onDoubleClick(function () {
-        mainswitcher.cut();
-    });
+    // grid.elementList['input-7'].onDoubleClick(function () {
+    //     mainswitcher.cut();
+    // });
     
     grid.elementList['input-8'].onClick(function () {
-        mainswitcher.changePreviewInput(8);
+        mainswitcher.tapped(8);
     });
 
-    grid.elementList['input-8'].onDoubleClick(function () {
-        mainswitcher.cut();
-    });
+    // grid.elementList['input-8'].onDoubleClick(function () {
+    //     mainswitcher.cut();
+    // });
 
     
     // Software is up and running Feedback to User:
-    sendUpAndRunningFeedbackToUser();
+    // sendUpAndRunningFeedbackToUser();
     
     function sendUpAndRunningFeedbackToUser() {
         var startAnimationSpeed = 100;
