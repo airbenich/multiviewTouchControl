@@ -77,9 +77,9 @@ class Videoswitcher {
 
 	tapped(input) {
 		if(this.state.preview == input) {
-			let toBePreview = this.state.program;
+			// let toBePreview = this.state.program;
 			this.changeProgramInput(input);
-			this.changePreviewInput(toBePreview);
+			// this.changePreviewInput(toBePreview);
 			
 			return true;
 		} else {
