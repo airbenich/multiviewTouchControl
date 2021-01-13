@@ -60,8 +60,9 @@ class TouchableView {
             var longestDistance = distanceX > distanceY ? distanceX : distanceY;
             
             // get transition percentage
-            var transitionLength = 270; // in px = 1080 (height) / 2 / 2
-            thisElement.transitionCurrentPercentage = longestDistance/(transitionLength/100);
+            var transitionLength = 540; // in px = 1080 (height) / 2
+            thisElement.transitionCurrentPercentage = longestDistance/(transitionLength/100)-10;
+	    if (thisElement.transitionCurrentPercentage < 0) thisElement.transitionCurrentPercentage = 0;
 
             // if second gesture
             if(thisElement.unfinishedTransitionPercentage) {
