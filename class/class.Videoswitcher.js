@@ -41,8 +41,8 @@ class Videoswitcher {
 		this.switcher.macroRun(index);
 	}
 
-	macroStop(index) {
-		this.switcher.macroStop(index);
+	macroStop() {
+		this.switcher.macroStop();
 	}
 
 	changeProgramInput(input) {
