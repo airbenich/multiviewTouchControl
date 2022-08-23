@@ -16,9 +16,10 @@
   "author": "airbenich",
   "license": "GPL-3.0",
   "devDependencies": {
-    "electron": "^7.2.4"
+    "electron": "16.2.8"
   },
   "dependencies": {
+    "@electron/remote": "^2.0.8",
     "atem-connection": "^1.2.0",
     "jquery": "^3.5.0",
     "yargs": "^15.0.2"

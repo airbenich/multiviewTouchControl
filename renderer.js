@@ -5,7 +5,7 @@
 // selectively enable features needed in the rendering
 // process.
 
-const { ipcRenderer, remote } = require( "electron" );
+const { ipcRenderer } = require( "electron" );
 
 // Build multiview touchscreen grid
 let grid = new Grid('#multiViewGrid');
@@ -25,8 +25,10 @@ grid.addRowInColumn(2,new TouchableView(1,1,'input-8'));
 grid.render();
 
 // initialize videomixer
-var switcherip = remote.getGlobal('switcherip');
-if(switcherip !== null) {
+// var switcherip = BrowserWindow.getGlobal('switcherip');
+ipcRenderer.send("getIp");
+ipcRenderer.on("switcherIp", (listener, switcherip) => {
+    console.log("Recieved switcher ip: " + switcherip);
     let mainswitcher = new Videoswitcher('Mainswitcher',switcherip);
 
     // connect touchable view to mixer action
@@ -123,4 +125,4 @@ if(switcherip !== null) {
         }
     }
     
-}
+})

@@ -3,6 +3,7 @@ const {app, BrowserWindow, BrowserView} = require('electron')
 const path = require('path')
 const yargs = require('yargs');
 const { ipcMain } = require( "electron" );
+require('@electron/remote/main').initialize()
 
 
 // command line parameters
@@ -23,10 +24,14 @@ if (argv.ip) {
   global.switcherip = argv.ip;
 } else {
   // enter dmeo mode when no ip
-  console.log('Please add switcher ip: npm start switcher 192.168.1.x');
+  console.log('Please add switcher ip: npm start switcher 192.168.1.100');
   console.log('Starting demo mode');
-  global.switcherip = null;
+  global.switcherip = "192.168.1.100";
 }
+
+ipcMain.on("getIp", (event) => {
+  event.sender.send("switcherIp", global.switcherip)
+})
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -38,7 +43,8 @@ function createWindow () {
     width: 1920,
     height: 1080,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     }
   })
 
