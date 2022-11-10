@@ -16,7 +16,7 @@
   "author": "airbenich",
   "license": "GPL-3.0",
   "devDependencies": {
-    "electron": "16.2.8"
+    "electron": "18.3.7"
   },
   "dependencies": {
     "@electron/remote": "^2.0.8",
